@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
-const TicketForm = () => {
+const TicketForm = ({ ticket, EDITMODE }) => {
   const route = useRouter();
 
   const handleChange = (e) => {
@@ -18,28 +18,34 @@ const TicketForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch("/api/Tickets", {
-      method: "POST",
-      body: JSON.stringify({ formData }),
-      "content-type": "application/json",
-    });
+
+    const res = await fetch(
+      `http://localhost:3000/api/Tickets${EDITMODE ? `/${ticket._id}` : ""}`,
+      {
+        method: EDITMODE ? "PUT" : "POST",
+        body: JSON.stringify({ formData }),
+        "content-type": "application/json",
+      }
+    );
 
     if (!res.ok) {
-      throw new Error("Failed to create Ticket.");
+      throw new Error("Failed");
     }
 
     route.refresh();
     route.push("/");
   };
 
-  const startingTicketData = {
-    title: "",
-    description: "",
-    priority: 1,
-    progress: 0,
-    status: "not started",
-    category: "Hardware Problem",
-  };
+  const startingTicketData = EDITMODE
+    ? { ...ticket }
+    : {
+        title: "",
+        description: "",
+        priority: 1,
+        progress: 0,
+        status: "not started",
+        category: "Hardware Problem",
+      };
 
   const [formData, setFormData] = useState(startingTicketData);
   return (
@@ -49,7 +55,7 @@ const TicketForm = () => {
         method="post"
         onSubmit={handleSubmit}
       >
-        <h3>Create Your Ticket</h3>
+        <h3>{EDITMODE ? "Edit" : "Create"} Your Ticket</h3>
         <label>Title</label>
         <input
           id="title"
@@ -143,7 +149,11 @@ const TicketForm = () => {
           <option value="started">Started</option>
           <option value="done">Done</option>
         </select>
-        <input type="submit" className="btn" value="Create Ticket" />
+        <input
+          type="submit"
+          className="btn"
+          value={`${EDITMODE ? "Edit" : "Create"} Ticket`}
+        />
       </form>
     </div>
   );
