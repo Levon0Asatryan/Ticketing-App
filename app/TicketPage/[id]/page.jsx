@@ -1,5 +1,7 @@
-const TickerPage = ({ params }) => {
-  return <div>TickerPage {params.id}</div>;
+import TicketForm from "@/app/(components)/TicketForm";
+
+const TicketCard = ({ params }) => {
+  return <TicketForm />;
 };
 
-export default TickerPage;
+export default TicketCard;

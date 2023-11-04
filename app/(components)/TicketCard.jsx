@@ -3,18 +3,18 @@ import PriorityDisplay from "./PriorityDisplay";
 import ProgressDisplay from "./ProgressDisplay";
 import StatusDisplay from "./StatusDisplay";
 
-const TickerCard = () => {
+const TicketCard = ({ ticket }) => {
   return (
     <div className="flex flex-col bg-card hover:bg-card-hover rounded-md shadow-lg p-3 m-2">
       <div className="flex mb-3 ">
-        <PriorityDisplay />
+        <PriorityDisplay priority={ticket.priority} />
         <div className="ml-auto">
           <DeleteBlock />
         </div>
       </div>
-      <h4>Yicket Title</h4>
+      <h4>{ticket.title}</h4>
       <hr className="h-px border-0 bg-page nb-2" />
-      <p className="whitespace-pres-wrap">thi9s is the ticket</p>
+      <p className="whitespace-pres-wrap">{ticket.description}</p>
       <div className="flex-grow"></div>
       <div className="flex mt-2 ">
         <div className="flex- flex-col">
@@ -29,4 +29,4 @@ const TickerCard = () => {
   );
 };
 
-export default TickerCard;
+export default TicketCard;
